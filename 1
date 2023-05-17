@@ -1,0 +1,113 @@
+//8 3 9 4 5 7 2 10 0
+//8 1 2 4 2 3 4 10
+//C:\Users\evko_\source\repos\ConsoleApplication54\x64\Debug\ConsoleApplication54.exe(процесс 4816) завершил работу с кодом 0.
+//Чтобы автоматически закрывать консоль при остановке отладки, включите параметр "Сервис" ->"Параметры" ->"Отладка" -> "Автоматически закрыть консоль при остановке отладки".
+//Нажмите любую клавишу, чтобы закрыть это окно :
+
+#include <iostream>
+using namespace std;
+struct tree {
+    int info;
+    tree* left, * right;
+};
+
+void add_node(tree* root, double data)
+{
+    if (data < root->info)
+    {
+        if (root->left == NULL)
+        {
+            tree* r;
+            r = new tree;
+            r->info = data;
+            r->left = NULL;
+            r->right = NULL;
+            root->left = r;
+        }
+        else
+        {
+            add_node(root->left, data);
+        }
+    }
+    else
+    {
+        if (root->right == NULL)
+        {
+            tree* r;
+            r = new tree;
+            r->info=data;
+            r->left = NULL;
+            r->right = NULL;
+            root->right=r;
+        }
+        else
+        {
+            add_node(root->right, data);
+        }
+    }
+}
+int right(tree* root)
+{
+    if (root == NULL)
+    {
+        return 0;
+    }
+    if (root->right != NULL)
+    {
+        return 1 + right(root->right) + right(root->left);
+    }
+    return right(root->right) + right(root->left);
+}
+void nech(tree* root)
+{
+    if (root != NULL)
+    {
+        if (root->info % 2 != 0)
+            root->info = root->info / 2;
+        nech(root->left);
+        nech(root->right);
+    }
+}
+void nlr(tree* root)
+{
+    if (root != NULL)
+    {
+        cout << root->info<<" ";
+        nlr(root->left);
+        nlr(root->right);
+    }
+
+}
+void destroy(tree* root)
+{
+    if (root == NULL)
+        return;
+    destroy(root->left);
+    destroy(root->right);
+    delete root;
+
+}
+int main()
+{
+    int x;
+    tree* root=new tree;
+    cin >> x;
+    root->info = x;
+    root->left=NULL;
+    root->right = NULL;
+    cin >> x;
+    while (x != 0)
+    {
+        add_node(root, x);
+        cin >> x;
+    }
+    int kol=right(root);
+    if (kol > 3)
+    {
+        nech(root);
+    }
+    nlr(root);
+    destroy(root);
+    return 0;
+}
+
